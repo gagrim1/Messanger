@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+    <head>
+        <title>Hello World!</title>
+    </head>
+    <body>
+        <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+        </form>
+        <div>
+          <form action="greeting" method="post">
+            <input type="text" name="text" placeholder="Enter a message" />
+            <input type="text" name="tag" placeholder="Enter a tag" />
+            <button type="submit">Send</button>
+            <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+          </form>
+        </div>
+        <div>Messages List</div>
+        <form action="filter" method="post">
+          <input type="text" name="filter" />
+          <button type="submit">Find</button>
+          <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+        </form>
+        <form action="greeting" method="get">
+          <ul th:each="message : ${messages}">
+            <li><span th:text="${message.text}">message</span></li>
+            <span th:text="${message.tag}">tag</span>
+           | <a th:href="@{/delete/{id}(id=${message.id})}">delete</a>
+          </ul>
+          <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+        </form>
+    </body>
+</html>
